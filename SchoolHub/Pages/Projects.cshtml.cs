@@ -21,8 +21,17 @@ namespace SchoolHub.Pages
         [BindProperty]
         public string Category { get; set; } = string.Empty;
         public List<Project> Projects { get; set; } = new();
+        public int TotalProjectsCount { get; set; }
         public string Message { get; set; } = string.Empty;
-        
+        public List<string> Categories { get; } = new()
+        {
+            "Programming",
+            "Games",
+            "Sites",
+            "Mobile apps",
+            "Design",
+            "Other"
+        };
 
         public IActionResult OnGet()
         {
@@ -54,6 +63,7 @@ namespace SchoolHub.Pages
                 Title = Title,
                 Description = Description,
                 Category = Category,
+                CreatedAt = DateTime.Now,
                 AuthorId = userId.Value
             };
             _context.Projects.Add(project);
@@ -65,8 +75,10 @@ namespace SchoolHub.Pages
         {
             Projects = _context.Projects
                 .Include(p => p.Author)
-                .OrderByDescending(p => p.Id)
+                .OrderByDescending(p => p.CreatedAt)
+                .ThenByDescending(p => p.Id)
                 .ToList();
+            TotalProjectsCount = Projects.Count;
         }
     }
 }

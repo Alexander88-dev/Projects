@@ -1,0 +1,68 @@
+﻿@page
+@model SchoolHub.Pages.MyProjectsModel
+@{
+	ViewData["Title"] = "My projects";
+}
+
+<div class="container mt-5">
+	<div class="d-fex justify-content-between align-items-center mb-4">
+		<div>
+			<h1 class="mb-1">
+				My projects
+			</h1>
+			<p class="text-muted mb-0">
+				User: @Model.CurrentUserName
+			</p>
+		</div>
+
+		<span class="badge bg-success fs-6">
+			My projects: @Model.MyProjectsCount
+		</span>
+	</div>
+
+	@if(Model.Projects.Count == 0)
+	{
+		<div class="alert alert-info">
+			U don't have any projects
+		</div>
+	}
+	else
+	{
+		<div class="row">
+			@foreach(var project in Model.Projects)
+			{
+				<div class="col-md-6 mb-4">
+					<div class="card h-100 shadow-sm">
+						<div class="card-body">
+							<h4 class="card-title">
+								@project.Title
+							</h4>
+
+							<p class="mb-2">
+								<span class="badge bg-primary">
+									@project.Category
+								</span>
+							</p>
+
+							<p class="card-text">
+								@project.Description
+							</p>
+						</div>
+
+						<div class="catd-footer">
+							<small class="d-block text-muted mb-2">
+								Created at: @project.CreatedAt.ToString("dd.MM.yyyy HH:mm")
+							</small>
+
+							<form method="post" asp-page-handler="Delete" asp-route-itemid="@project.Id">
+								<button type="submit" class="btn btn-danger btn-sm">
+									Delete
+								</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+	}
+</div>
