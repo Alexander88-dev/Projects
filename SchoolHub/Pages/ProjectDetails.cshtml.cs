@@ -17,7 +17,7 @@ namespace SchoolHub.Pages
         public IActionResult OnGet(int id)
         {
             ProjectItem = _context.Projects
-                .Include(p => p.AuthorId)
+                .Include(p => p.Author)
                 .FirstOrDefault(p => p.Id == id);
 
             if (ProjectItem == null) 

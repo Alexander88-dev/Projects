@@ -15,24 +15,24 @@
 					<span class="badge bg-primary">
 						@Model.ProjectItem.Category
 					</span>
+					<span class="badge bg-secondary">
+						@Model.ProjectItem.Status
+					</span>
 				</p>
 				<p class="mb-1">
 					<strong>Автор:</strong> @Model.ProjectItem.Author?.Name
 				</p>
 
 				<p class="mb-3">
-					<strong> Дата создание:</strong> @Model
-					.ProjectItem
-					.CreatedAt
-					.ToString("dd.MM.yyyy HH:mm")
+					<strong> Дата создание:</strong> @Model.ProjectItem.CreatedAt.ToString("dd.MM.yyyy HH:mm")
 				</p>
 
 				<div class="d-flex gap-2">
-					<a asp-asp-page="/Projects" class="btn btn-secondary">
-						Назад ко всем проектам	
+					<a asp-page="/Projects" class="btn btn-secondary">
+						Назад ко всем проектам
 					</a>
 
-					<a asp-asp-page="/MyProjects" class="btn btn-outline-succ">
+					<a asp-page="/MyProjects" class="btn btn-outline-success">
 						Мои проекты
 					</a>
 				</div>

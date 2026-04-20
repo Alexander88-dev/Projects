@@ -9,7 +9,7 @@
         public int AuthorId { get; set; }
         public string Category {  get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
-        public int Version { get; set; } 
+        public string Status { get; set; } = "Идея";
         public User? Author { get; set; }
     }
 }

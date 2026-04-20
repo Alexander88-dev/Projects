@@ -20,6 +20,8 @@ namespace SchoolHub.Pages
         public string Description { get; set; } = string.Empty;
         [BindProperty]
         public string Category { get; set; } = string.Empty;
+        [BindProperty]
+        public string Status { get; set; } = "Идея";
         public List<Project> Projects { get; set; } = new();
         public int TotalProjectsCount { get; set; }
         public string Message { get; set; } = string.Empty;
@@ -32,7 +34,12 @@ namespace SchoolHub.Pages
             "Дизайн",
             "Другое"
         };
-
+        public List<string> Statuses { get; } = new()
+        {
+            "Идея",
+            "В разработке",
+            "Заершён"
+        };
         public IActionResult OnGet()
         {
             var userId = HttpContext.Session.GetInt32("UserId");
@@ -52,7 +59,8 @@ namespace SchoolHub.Pages
             }
             if ( string.IsNullOrEmpty(Title) ||
                     string.IsNullOrEmpty(Description) ||
-                    string.IsNullOrEmpty(Category)) 
+                    string.IsNullOrEmpty(Category)||
+                    string.IsNullOrEmpty(Status)) 
             {
                 Message = "Заполните все поля.";
                 LoadProjects();

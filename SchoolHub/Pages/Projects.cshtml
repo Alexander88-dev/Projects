@@ -48,6 +48,18 @@
 						}
 					</select>
 				</div>
+
+				<div class="mb-3">
+					<label class="form-label">Статус</label>
+					<select asp-for="Status" class="form-select">
+						@foreach (var status in Model.Statuses)
+						{
+							<option value="@status">
+								@status
+							</option>
+						}
+					</select>
+				</div>
 			
 				<button type="submit" class="btn btn-success">Добавить проект.</button>
 			</form>
@@ -59,7 +71,6 @@
 		<div class="alert alert-info">
 				Пока проектов нет.
 		</div>
-
 	}
 	else
 	{
@@ -71,13 +82,20 @@
 					<h4 class="mb-4 card-title"@project.Title>@project.Title</h4>
 					<p class="mb-2">
 						<span class="badge bg-primary">@project.Category</span>
+						<span class="badge bg-secondary">@project.Status</span>
 					</p>
 					<p class="card-text">@project.Description</p>
 
 					<div class="card-footer">
-						<small class="card-footer">
+						<small class="d-block text-muted">
 							Автор: @project.Author?.Name
 						</small>
+							<small class="d-block text-muted">
+							Дата создание: @project.CreatedAt.ToString("dd.MM.yyyy HH:mm");
+						</small>
+							<a asp-page="/ProjectDetails" asp-route-id="@project.Id" class="btn btn-outline-primary btn-sm">
+								Открыть
+							</a>
 					</div>
 				</div>
 			</div>

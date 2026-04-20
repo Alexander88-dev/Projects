@@ -8,7 +8,7 @@
 	<div class="d-fex justify-content-between align-items-center mb-4">
 		<div>
 			<h1 class="mb-1">
-				My projects
+				Мои проекты
 			</h1>
 			<p class="text-muted mb-0">
 				Пользователь: @Model.CurrentUserName
@@ -16,7 +16,7 @@
 		</div>
 
 		<span class="badge bg-success fs-6">
-			My projects: @Model.MyProjectsCount
+			Мои проекты: @Model.MyProjectsCount
 		</span>
 	</div>
 
@@ -54,11 +54,23 @@
 								Created at: @project.CreatedAt.ToString("dd.MM.yyyy HH:mm")
 							</small>
 
-							<form method="post" asp-page-handler="Delete" asp-route-itemid="@project.Id">
-								<button type="submit" class="btn btn-danger btn-sm">
-									Delete
-								</button>
-							</form>
+							<div class="d-flex gap-2">
+								<a asp-page="/ProjectDetails" asp-route-id="@project.Id" class="btn btn-outline-primary btn-sm">
+									Открыть	
+								</a>
+								
+								<a asp-page="/EditProjects" asp-route-id="@project.Id" class="btn btn-warning btn-sm">
+									Редактировать
+								</a>
+
+								<form method="post" asp-page-handler="Delete" asp-route-itemid="@project.Id">
+									<button type="submit" class="btn btn-danger btn-sm">
+										Удалить
+									</button>
+								</form>
+
+							</div>
+
 						</div>
 					</div>
 				</div>

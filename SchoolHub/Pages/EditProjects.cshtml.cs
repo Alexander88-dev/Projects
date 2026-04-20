@@ -19,6 +19,9 @@ namespace SchoolHub.Pages
         public string Description { get; set; } = string.Empty;
         [BindProperty]
         public string Category { get; set; } = string.Empty;
+        [BindProperty]
+        public string Status { get; set; } = "Идея";
+        
         public string Message { get; set; } = string.Empty;
         public List<string> Categories { get; } = new()
         {
@@ -29,6 +32,12 @@ namespace SchoolHub.Pages
             "Мобильные Приложения",
             "Дизайн",
             "Другое"
+        };
+        public List<string> Statuses { get; } = new()
+        {
+            "Идея",
+            "В разработке",
+            "Завершён"
         };
         public IActionResult OnGet(int id)
         {
@@ -48,10 +57,18 @@ namespace SchoolHub.Pages
             {
                 return RedirectToPage("/Projects");
             }
+
+            if (project.Status == "Завершён")
+            {
+                return RedirectToPage("/MyProjects");
+            }
+
             Id = userId.Value;
             Title = project.Title;
             Description = project.Description;
             Category = project.Category;
+            Status = project.Status;
+
             return Page();
         }
 
@@ -64,7 +81,8 @@ namespace SchoolHub.Pages
             }
             if(string.IsNullOrWhiteSpace(Title) ||
                 string.IsNullOrWhiteSpace(Description) ||
-                string.IsNullOrWhiteSpace(Category)) 
+                string.IsNullOrWhiteSpace(Category) ||
+                string.IsNullOrWhiteSpace(Status)) 
             {
                 Message = "Заполните все поля";
                 return Page();
@@ -79,14 +97,19 @@ namespace SchoolHub.Pages
             {
                 return RedirectToPage("/Projects");
             }
-
+            
+            if (project.Status == "Завершён")
+            {
+                return RedirectToPage("/MyProjects");
+            }
             project.Title = Title;
             project.Description = Description;
             project.Category = Category;
+            project.Status = Status;
+
             _context.SaveChanges();
 
             return RedirectToPage("/MyProjects");
         }
-    }
-
-    }
+    }    
+}
