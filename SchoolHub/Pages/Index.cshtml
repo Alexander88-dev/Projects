@@ -5,7 +5,7 @@
 }
 
 <div class="container mt-5">
-    <div class="row justity-content-center">
+    <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
             @if (!string.IsNullOrEmpty(Model.Message))
             {
@@ -75,10 +75,11 @@
                                     <div class="mb-3">
                                         <label class="form-label">Пароль</label>
                                         
+                                        
                                         <input asp-for="LoginPassword" type="password" class="form-control" id="PasswordVisibilityI" />
-                                        <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('loginPassword', this)">
-                                            Показать
-                                        </button>
+                                        <label id="labelId">
+                                            <input type="checkbox" onclick="togglePassword('loginPassword', this)"> Показать
+                                        </label>
                                     </div>
 
                                     <button type="submit" class="btn btn-primary w=100">

@@ -25,12 +25,12 @@ namespace SchoolHub.Pages
         public string Message { get; set; } = string.Empty;
         public List<string> Categories { get; } = new()
         {
-            "Programming",
-            "Games",
-            "Sites",
-            "Mobile apps",
-            "Design",
-            "Other"
+            "Программировать",
+            "Играть",
+            "Сайты",
+            "Мобильные приложения",
+            "Дизайн",
+            "Другое"
         };
 
         public IActionResult OnGet()

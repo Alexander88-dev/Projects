@@ -1,7 +1,7 @@
 ﻿@page
 @model SchoolHub.Pages.MyProjectsModel
 @{
-	ViewData["Title"] = "My projects";
+	ViewData["Title"] = "Мои проекты";
 }
 
 <div class="container mt-5">
@@ -11,7 +11,7 @@
 				My projects
 			</h1>
 			<p class="text-muted mb-0">
-				User: @Model.CurrentUserName
+				Пользователь: @Model.CurrentUserName
 			</p>
 		</div>
 
@@ -23,7 +23,7 @@
 	@if(Model.Projects.Count == 0)
 	{
 		<div class="alert alert-info">
-			U don't have any projects
+			У вас нет никаких проектов.
 		</div>
 	}
 	else

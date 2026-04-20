@@ -7,14 +7,16 @@
 function togglePassword(inputId, button)
 {
     const input = document.getElementById("PasswordVisibilityI");
+    const label = document.getElementById("labelId");
+    
     if (input.type === "password")
     {
         input.type = "text";
-        button.textContent = "Скрыть"
+        //label.innerText = 'новый текст'
     }
     else
     {
         input.type = "password";
-        button.textContent = "Показать"
+        //label.innerText = 'новый текст'
     } 
 }

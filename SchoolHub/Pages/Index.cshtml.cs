@@ -81,7 +81,6 @@ namespace SchoolHub.Pages
             _context.SaveChanges();
 
             HttpContext.Session.SetInt32("UserId", user.Id);
-           // HttpContext.Session.SetString("UserName", user.Name);
 
             return RedirectToPage();
         }
@@ -114,8 +113,6 @@ namespace SchoolHub.Pages
             }
 
             HttpContext.Session.SetInt32("UserId", user.Id);
-            //HttpContext.Session.SetString("UserName", user.Name);
-            //HttpContext.Session.SetString("UserLogin", user.Login);
 
             return RedirectToPage();
         }
