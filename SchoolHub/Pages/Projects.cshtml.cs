@@ -3,16 +3,20 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SchoolHub.Data;
 using SchoolHub.Models;
+using SchoolHub.Services;
 using SQLitePCL;
 
 namespace SchoolHub.Pages
 {
     public class ProjectsModel : PageModel
     {
-        private readonly AppDbContext _context;
-        public ProjectsModel(AppDbContext context) 
+        private readonly IProjectService _projectService;
+        private readonly ICurrentUserService _currentUserService;
+
+        public ProjectsModel(IProjectService projectService, ICurrentUserService currentUserService)
         {
-            _context = context;
+            _projectService = projectService;
+            _currentUserService = currentUserService;
         }
         [BindProperty]
         public string Title { get; set; } = string.Empty;
@@ -40,19 +44,14 @@ namespace SchoolHub.Pages
             "В разработке",
             "Заершён"
         };
-        public IActionResult OnGet()
+        public void OnGet()
         {
-            var userId = HttpContext.Session.GetInt32("UserId");
-            if(userId == null) 
-            {
-                return Redirect("/Index");
-            }
             LoadProjects();
-            return Page();
         }
         public IActionResult OnPostAdd() 
         {
-            var userId = HttpContext.Session.GetInt32("UserId");
+            var userId = _currentUserService.GetCurrentUserId(HttpContext);
+
             if (userId == null)
             {
                 return Redirect("/Index");
@@ -74,18 +73,13 @@ namespace SchoolHub.Pages
                 CreatedAt = DateTime.Now,
                 AuthorId = userId.Value
             };
-            _context.Projects.Add(project);
-            _context.SaveChanges();
+            _projectService.AddProject(project);
             return RedirectToPage();
         }
 
         private void LoadProjects() 
         {
-            Projects = _context.Projects
-                .Include(p => p.Author)
-                .OrderByDescending(p => p.CreatedAt)
-                .ThenByDescending(p => p.Id)
-                .ToList();
+            Projects =_projectService.GetAllProjects(); 
             TotalProjectsCount = Projects.Count;
         }
     }

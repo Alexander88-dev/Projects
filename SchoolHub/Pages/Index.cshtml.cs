@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolHub.Data;
 using SchoolHub.Models;
+using SchoolHub.Services;
 
 namespace SchoolHub.Pages
 {
@@ -10,10 +12,13 @@ namespace SchoolHub.Pages
     {
         private readonly AppDbContext _context;
         private readonly PasswordHasher<User> _passeordHasher;
-        public IndexModel(AppDbContext context)
+        private readonly ICurrentUserService _crrentUserService;
+
+        public IndexModel(AppDbContext context, ICurrentUserService currentUserService)
         {
             _context = context;
             _passeordHasher = new PasswordHasher<User>();
+            _crrentUserService = currentUserService;
         }
         [BindProperty]
         public string RegisterName { get; set; } = string.Empty;
@@ -80,7 +85,8 @@ namespace SchoolHub.Pages
             _context.Users.Add(user);
             _context.SaveChanges();
 
-            HttpContext.Session.SetInt32("UserId", user.Id);
+            //HttpContext.Session.SetInt32("UserId", user.Id);
+            _crrentUserService.SignIn(HttpContext, user.Id);
 
             return RedirectToPage();
         }
@@ -111,26 +117,27 @@ namespace SchoolHub.Pages
                 Message = "Не верный логин или пароль";
                 return Page();
             }
-
-            HttpContext.Session.SetInt32("UserId", user.Id);
+            //HttpContext.Session.SetInt32("UserId", user.Id);
+            _crrentUserService.SignIn(HttpContext, user.Id);
 
             return RedirectToPage();
         }
         public IActionResult OnPostLogout()
         {
-            HttpContext.Session.Clear();
+            //HttpContext.Session.Clear();
+            _crrentUserService.SignOut(HttpContext);
             return RedirectToPage();
         }
-        private void LoadUser() 
+        private void LoadUser()
         {
-            var userId = HttpContext.Session.GetInt32("UserId");
-            if(userId == null) 
-            {
-                IsAuthorized = false;
-                return;
-            }
+            //var userId = HttpContext.Session.GetInt32("UserId");
+            //if(userId == null) 
+            //{
+            //    IsAuthorized = false;
+            //    return;
+            //}
 
-            var user = _context.Users.FirstOrDefault(u => u.Id == userId.Value);
+            var user = _crrentUserService.GetCurrentUser(HttpContext); ;
 
             if (user == null)
             {

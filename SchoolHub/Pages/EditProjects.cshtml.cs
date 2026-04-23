@@ -1,15 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolHub.Data;
+using SchoolHub.Services;
 
 namespace SchoolHub.Pages
 {
     public class EditProjectsModel : PageModel
     {
-        public readonly AppDbContext _context;
-        public EditProjectsModel(AppDbContext context) 
+        private readonly IProjectService _projectService;
+        private readonly ICurrentUserService _currentUserService;
+        public EditProjectsModel(IProjectService projectService, ICurrentUserService currentUserService) 
         {
-            _context = context;
+            _projectService = projectService;
+            _currentUserService = currentUserService;
         }
         [BindProperty]
         public int Id { get; set; }
@@ -41,13 +44,13 @@ namespace SchoolHub.Pages
         };
         public IActionResult OnGet(int id)
         {
-            var userId = HttpContext.Session.GetInt32("UserId");
+            var userId = _currentUserService.GetCurrentUserId(HttpContext);
 
             if (userId == null) 
             {
                 return RedirectToPage("/Idet");
             }
-            var project = _context.Projects.FirstOrDefault(p => p.Id == id);
+            var project = _projectService.GetProjectById(id);
             if (project == null)
             {
                 return RedirectToPage("/MyProjects");
@@ -74,7 +77,7 @@ namespace SchoolHub.Pages
 
         public IActionResult OnPost()
         {
-            var userId = HttpContext.Session.GetInt32("UserId");
+            var userId = _currentUserService.GetCurrentUserId(HttpContext);
             if (userId == null)
             {
                 return RedirectToPage("/Idet");
@@ -87,7 +90,7 @@ namespace SchoolHub.Pages
                 Message = "Заполните все поля";
                 return Page();
             }
-            var project = _context.Projects.FirstOrDefault(p => p.Id == Id);
+            var project = _projectService.GetProjectById(Id);
             if (project == null)
             {
                 return RedirectToPage("/MyProjects");
@@ -107,7 +110,7 @@ namespace SchoolHub.Pages
             project.Category = Category;
             project.Status = Status;
 
-            _context.SaveChanges();
+            _projectService.UpdateProject(project);
 
             return RedirectToPage("/MyProjects");
         }
