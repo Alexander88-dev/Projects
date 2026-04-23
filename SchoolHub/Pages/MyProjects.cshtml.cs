@@ -3,42 +3,47 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SchoolHub.Data;
 using SchoolHub.Models;
+using SchoolHub.Services;
 
 namespace SchoolHub.Pages
 {
     public class MyProjectsModel : PageModel
     {
-        private readonly AppDbContext _context;
-        public MyProjectsModel(AppDbContext context)
+        private readonly IProjectService _projectService;
+        private readonly ICurrentUserService _currentUserService;
+
+        public MyProjectsModel(IProjectService projectService, ICurrentUserService currentUserService)
         {
-            _context = context;
+            _projectService = projectService;
+            _currentUserService = currentUserService;
         }
 
         public List<Project> Projects { get; set; } = new();
         public int MyProjectsCount { get; set; }
-        public string CurrentUserName { get; set; }
+        public string CurrentUserName { get; set; } = string.Empty;
         public IActionResult OnGet()
         {
-            var userId = HttpContext.Session.GetInt32("UserId");
-            if(userId == null)
+            var user = _currentUserService.GetCurrentUser(HttpContext);
+           
+            if(user == null)
             {
                 return RedirectToPage("/index");
             }
 
-            LoadMyProject(userId.Value);
+            LoadMyProject(user.Id, user.Name);
             return Page();
         }
 
         public IActionResult OnPostDelete(int itemid)
         {
-            var userId = HttpContext.Session.GetInt32("UserId");
-            if(userId == null)
+            var userId = _currentUserService.GetCurrentUserId(HttpContext);
+            if (userId == null)
             {
                 Console.WriteLine("\n\n\n\n\nUSER ID ERROR\n\n\n\n\n");
                 return RedirectToPage("/Index");
             }
 
-            var project = _context.Projects.FirstOrDefault(x => x.Id == itemid);
+            var project = _projectService.GetProjectById(itemid);
             if(project == null)
             {
                 Console.WriteLine($"\n\n\n\n\nPROJECT ID ERROR:{itemid}\n\n\n\n\n");
@@ -50,25 +55,15 @@ namespace SchoolHub.Pages
                 return RedirectToPage();
             }
 
-            _context.Projects.Remove(project);
-            _context.SaveChanges();
+            _projectService.DeleteProject(project);
 
             return RedirectToPage();
         }
 
-        private void LoadMyProject(int userId)
+        private void LoadMyProject(int userId, string userName)
         {
-            var user = _context.Users.FirstOrDefault(x => x.Id == userId);
-            if (user != null)
-            {
-                CurrentUserName = user.Name;
-            }
-            Projects = _context.Projects
-                .Where(x => x.AuthorId == userId)
-                .OrderByDescending(x => x.CreatedAt)
-                .ThenByDescending(x => x.Id)
-                .ToList();
-
+            CurrentUserName = userName;
+            Projects = _projectService.GetProjectByAuthorId(userId);
             MyProjectsCount = Projects.Count;
         }
     }

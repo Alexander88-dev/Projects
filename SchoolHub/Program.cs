@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using SchoolHub.Data;
+using SchoolHub.Middleware;
+using SchoolHub.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +19,9 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
+
 
 var app = builder.Build();
 
@@ -34,6 +40,9 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseSession();
+
+app.UseMiddleware<RequestLoggingMiddleware>();
+app.UseMiddleware<AuthRedirectMiddleware>();
 
 app.UseRouting();
 
