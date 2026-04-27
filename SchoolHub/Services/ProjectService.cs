@@ -49,5 +49,11 @@ namespace SchoolHub.Services
             _context.Projects.Remove(project);
             _context.SaveChanges();
         }
+        public bool ProjectExists(int id) 
+        {
+            return _context.Projects.Any(p => p.Id == id);
+        }
+        
+        
     }
 }

@@ -11,7 +11,7 @@ namespace SchoolHub.ViewModels
         public string Description { get; set; } = string.Empty;
         [Required(ErrorMessage = "Введите категорию")] 
         public string Category { get; set; } = string.Empty;
-        [Required(ErrorMessage = "Введите Статус")] 
+        [Required(ErrorMessage = "Введите Статус")]
         public string Status { get; set; } = string.Empty;
     }
 }

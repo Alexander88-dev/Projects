@@ -44,19 +44,19 @@
 							<td>@project.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
 							<td>
 								<div class="d-flex flex-wrap gap-2">
-									<a asp-controller="AdminPrjects" action="Details" asp-route-id=@project.Id" class="btn btn-outline-primary btn small">
+								<a asp-controller="AdminProjects" asp-action="Details" asp-route-id=@project.Id" class="btn btn-outline-primary btn-sm">
 										Подробнее
 									</a>
 								</div>
 
 							<div class="d-flex flex-wrap gap-2">
-								<a asp-controller="AdminPrjects" action="Edit" asp-route-id=@project.Id" class="btn btn-outline-warning btn small">
+								<a asp-controller="AdminProjects" asp-action="Edit" asp-route-id=@project.Id" class="btn btn-outline-warning btn-sm">
 									Редактировать
 								</a>
 							</div>
 
 								<div class="d-flex flex-wrap gap-2">
-									<a asp-controller="AdminPrjects" action="Delete" asp-route-id=@project.Id" class="btn btn-outline-danger btn small">
+								<a asp-controller="AdminProjects" asp-action="Delete" asp-route-id=@project.Id" class="btn btn-outline-danger btn-sm">
 										Удалить
 									</a>
 							</div>

@@ -15,7 +15,7 @@
 				<strong>Автор</strong> @Model.Author?.Name
 			</p>
 			<p class="mb-3">
-				<strong>Дата создание</strong> @Model..CreatedAt.ToString("dd.MM.yyyy HH:mm")
+				<strong>Дата создание</strong> @Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")
 			</p>
 			<div class="d-flex gap-2">
 				<a asp-controller="AdminProjects" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">

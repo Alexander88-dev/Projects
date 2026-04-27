@@ -10,7 +10,7 @@ namespace SchoolHub.Services
         void AddProject(Project project);
         void UpdateProject(Project project);
         void DeleteProject(Project project);
-    
+        bool ProjectExists(int id);
     
     }
 }
